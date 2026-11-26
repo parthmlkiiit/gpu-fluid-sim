@@ -1,0 +1,50 @@
+==== gpu_fluid: stable fluids with NVRTC-compiled CUDA ====
+GPU            : NVIDIA GeForce RTX 4050 Laptop GPU (sm_89, 6.0 GB, 20 SMs, 24 MB L2)
+CUDA driver    : 13.1
+NVRTC          : 12.9
+kernels        : src/kernels/fluid.cu -> sm_89 cubin, 34144 bytes, 62 ms
+grid           : 1024 x 1024 (1.05 M cells)
+steps / dt     : 900 / 1.00
+pressure       : 40 Jacobi sweeps, tiled kernel
+vorticity      : 0.30
+dissipation    : velocity 0.999, dye 0.997
+frames         : every 2 steps
+cpu compare    : 5 steps
+
+running 900 steps
+
+[step    50/900]    1.996 ms  (forces 0.613  advect 0.045  pressure 1.177  dye 0.162)  div_rms 5.22e-02
+[step   100/900]    2.157 ms  (forces 0.588  advect 0.042  pressure 1.365  dye 0.162)  div_rms 6.50e-02
+[step   150/900]    1.859 ms  (forces 0.539  advect 0.043  pressure 1.115  dye 0.162)  div_rms 6.31e-02
+[step   200/900]    1.893 ms  (forces 0.573  advect 0.043  pressure 1.115  dye 0.162)  div_rms 5.94e-02
+[step   250/900]    1.904 ms  (forces 0.513  advect 0.046  pressure 1.183  dye 0.162)  div_rms 6.23e-02
+[step   300/900]    1.943 ms  (forces 0.554  advect 0.046  pressure 1.182  dye 0.161)  div_rms 7.49e-02
+[step   350/900]    1.950 ms  (forces 0.560  advect 0.046  pressure 1.182  dye 0.162)  div_rms 7.71e-02
+[step   400/900]    2.201 ms  (forces 0.814  advect 0.046  pressure 1.179  dye 0.163)  div_rms 7.21e-02
+[step   450/900]    4.340 ms  (forces 1.066  advect 0.117  pressure 2.940  dye 0.217)  div_rms 7.51e-02
+[step   500/900]    3.238 ms  (forces 0.829  advect 0.085  pressure 2.142  dye 0.181)  div_rms 7.56e-02
+[step   550/900]    3.306 ms  (forces 0.896  advect 0.086  pressure 2.142  dye 0.181)  div_rms 7.33e-02
+[step   600/900]    5.154 ms  (forces 1.689  advect 0.125  pressure 3.117  dye 0.223)  div_rms 7.23e-02
+[step   650/900]    3.592 ms  (forces 0.910  advect 0.097  pressure 2.413  dye 0.172)  div_rms 7.51e-02
+[step   700/900]    3.615 ms  (forces 0.933  advect 0.096  pressure 2.413  dye 0.173)  div_rms 7.46e-02
+[step   750/900]    3.937 ms  (forces 1.088  advect 0.097  pressure 2.565  dye 0.186)  div_rms 7.43e-02
+[step   800/900]    3.560 ms  (forces 0.853  advect 0.097  pressure 2.437  dye 0.173)  div_rms 6.65e-02
+[step   850/900]    9.626 ms  (forces 3.112  advect 0.542  pressure 3.982  dye 1.991)  div_rms 6.71e-02
+[step   900/900]    3.763 ms  (forces 0.952  advect 0.100  pressure 2.531  dye 0.179)  div_rms 7.45e-02
+
+comparing with the CPU solver for 5 steps at 1024 x 1024
+
+================ summary ================
+grid               : 1024 x 1024
+steps / frames     : 900 / 450
+GPU time per step  : 3.386 ms avg (first step 1.925 ms)
+  forces           :  0.894 ms (26.4%)
+  advect velocity  :  0.102 ms ( 3.0%)
+  pressure solve   :  2.121 ms (62.7%)  40 x tiled Jacobi
+  advect dye       :  0.269 ms ( 7.9%)
+throughput         : 295.4 steps/s, 309.7 M cell-steps/s
+residual div (rms) : 7.450e-02
+wall time          : 18.69 s (PNGs written by 8 background threads)
+CPU step (1 core)  : 891.05 ms
+GPU step (avg)     : 3.386 ms  -> speedup 263.2x
+max |GPU - CPU|    : velocity 1.09e-03 (max |v| 7.413), dye 3.19e-05 (max 1.040)

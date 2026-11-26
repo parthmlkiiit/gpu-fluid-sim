@@ -1,0 +1,35 @@
+==== gpu_fluid: stable fluids with NVRTC-compiled CUDA ====
+GPU            : NVIDIA GeForce RTX 4050 Laptop GPU (sm_89, 6.0 GB, 20 SMs, 24 MB L2)
+CUDA driver    : 13.1
+NVRTC          : 12.9
+kernels        : src/kernels/fluid.cu -> sm_89 cubin, 34144 bytes, 61 ms
+grid           : 256 x 256 (0.07 M cells)
+steps / dt     : 300 / 1.00
+pressure       : 40 Jacobi sweeps, tiled kernel
+vorticity      : 0.30
+dissipation    : velocity 0.999, dye 0.997
+frames         : off
+cpu compare    : 3 steps
+
+running 300 steps
+
+[step   100/300]    0.735 ms  (forces 0.042  advect 0.047  pressure 0.587  dye 0.059)  div_rms 2.22e-02
+[step   200/300]    0.586 ms  (forces 0.039  advect 0.012  pressure 0.505  dye 0.030)  div_rms 2.34e-02
+[step   300/300]    0.673 ms  (forces 0.041  advect 0.048  pressure 0.544  dye 0.040)  div_rms 2.91e-02
+
+comparing with the CPU solver for 3 steps at 256 x 256
+
+================ summary ================
+grid               : 256 x 256
+steps / frames     : 300 / 0
+GPU time per step  : 0.652 ms avg (first step 0.675 ms)
+  forces           :  0.044 ms ( 6.8%)
+  advect velocity  :  0.032 ms ( 4.9%)
+  pressure solve   :  0.528 ms (81.0%)  40 x tiled Jacobi
+  advect dye       :  0.047 ms ( 7.2%)
+throughput         : 1534.7 steps/s, 100.6 M cell-steps/s
+residual div (rms) : 2.914e-02
+wall time          : 0.20 s
+CPU step (1 core)  : 39.28 ms
+GPU step (avg)     : 0.652 ms  -> speedup 60.3x
+max |GPU - CPU|    : velocity 2.38e-07 (max |v| 1.003), dye 4.47e-07 (max 0.702)

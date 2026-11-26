@@ -1,0 +1,9 @@
+bin/
+build/
+tools/
+output/demo/frames/
+output/quick/
+proof_of_execution.tar.gz
+__pycache__/
+*.o
+*.exe
